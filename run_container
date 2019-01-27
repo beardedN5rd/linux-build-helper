@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function run()
+{
+  echo "docker run -it -v ${SOURCE_DIRECTORY}:/workdir/src -v `pwd`:/workdir -w /workdir linux-builder:bionic ./make_kernel"
+  eval "docker run -it -v ${SOURCE_DIRECTORY}:/workdir/src -v `pwd`:/workdir -w /workdir linux-builder:bionic ./make_kernel"
+}
+
+cp /boot/config-`uname -r` .config
+
+while getopts d: option
+  do
+    case "${option}" in
+      d)  SOURCE_DIRECTORY=${OPTARG};;
+    esac
+done
+
+if [ -d ${SOURCE_DIRECTORY} ]
+  then
+    run
+fi
